@@ -1,3 +1,4 @@
+using Characters;
 using Services.Initialize;
 using Services.Input;
 using Services.Logger;
@@ -7,6 +8,8 @@ using Zenject;
 
 public class Test : MonoBehaviour
 {
+    [SerializeField] PlayerCharacter playerCharacter;
+    
     private IMediatorUI _mediator;
     private IInputService _inputService;
     
@@ -20,6 +23,8 @@ public class Test : MonoBehaviour
         {
             input.Init();
         }
+        
+        playerCharacter.Initialization(_inputService);
     }
     
     public void OpenTest()

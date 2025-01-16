@@ -25,7 +25,7 @@ namespace Services.UI
 
         public void CloseView()
         {
-            _openView.Hide();
+            _openView?.Hide();
             _openView = null;
         }
 
