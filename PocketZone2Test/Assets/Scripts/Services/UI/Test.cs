@@ -37,7 +37,12 @@ public class Test : MonoBehaviour
         _mediator.CloseView();
     }
 
-    private void MoveStart(Vector2 direction)
+    public void PlayerAttack()
+    {
+        playerCharacter.Attack();
+    }
+
+    /*private void MoveStart(Vector2 direction)
     {
         LoggerService.Log($"Moving to {direction}");
     }
@@ -57,5 +62,5 @@ public class Test : MonoBehaviour
     {
         _inputService.PlayerMoveStarted -= MoveStart;
         _inputService.PlayerMoveStoped -= MoveStop;
-    }
+    }*/
 }

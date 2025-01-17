@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Characters
 {
@@ -8,20 +9,20 @@ namespace Characters
     {
         Head,
         Torso,
-        Arms,
+        ArmsElbow,
+        ArmsWrist,
         Legs,
-        Bag
     }
     
-    public class PlayerCharacterModel : CharacterModel
+    public class HumanoidCharacterModel : CharacterModel
     {
         [SerializeField] private CharacterModelPart _head;
         [SerializeField] private CharacterModelPart _torso;
-        [SerializeField] private CharacterModelPart _leftArm;
-        [SerializeField] private CharacterModelPart _rightArm;
+        [SerializeField] private CharacterModelPart _leftArmElbow;
+        [SerializeField] private CharacterModelPart _leftArmWrist;
+        [SerializeField] private CharacterModelPart _rightArmWrist;
         [SerializeField] private CharacterModelPart _leftLeg;
         [SerializeField] private CharacterModelPart _rightLeg;
-        [SerializeField] private CharacterModelPart _bag;
 
         public void ChangeBodyPart(CharacterModelPartTypes type, Sprite sprite)
         {
@@ -42,6 +43,16 @@ namespace Characters
                 part.ChangeItem(sprite);
             }
         }
+
+        public void TakeOffItemPart(CharacterModelPartTypes type)
+        {
+            var parts = GetParts(type);
+
+            foreach (var part in parts)
+            {
+                part.TakeOffItem();
+            }
+        }
         
         private List<CharacterModelPart> GetParts(CharacterModelPartTypes type)
         {
@@ -55,16 +66,16 @@ namespace Characters
                 case CharacterModelPartTypes.Torso:
                     result.Add(_torso);
                     break;
-                case CharacterModelPartTypes.Arms:
-                    result.Add(_leftArm);
-                    result.Add(_rightArm);
+                case CharacterModelPartTypes.ArmsElbow:
+                    result.Add(_leftArmElbow);
+                    break;
+                case CharacterModelPartTypes.ArmsWrist:
+                    result.Add(_leftArmWrist);
+                    result.Add(_rightArmWrist);
                     break;
                 case CharacterModelPartTypes.Legs:
                     result.Add(_leftLeg);
                     result.Add(_rightLeg);
-                    break;
-                case CharacterModelPartTypes.Bag:
-                    result.Add(_bag);
                     break;
             }
             

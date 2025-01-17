@@ -14,7 +14,13 @@ namespace Characters
 
         public void ChangeItem(Sprite item)
         {
+            _item.enabled = true;
             _item.sprite = item;
+        }
+
+        public void TakeOffItem()
+        {
+            _item.enabled = false;
         }
     }
 }
