@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
+using Characters.Characters;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Characters
+namespace GameLogic.Characters
 {
     public enum CharacterModelPartTypes
     {

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8726471961433086489}
   - component: {fileID: 7681891023508135303}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7446002150515657127}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ShootEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3995804432395959451}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BulletSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,9 +242,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8241261261580993998, guid: 34d71d0ea18a7d94986059284fafbdcf, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8546989988479296468, guid: 34d71d0ea18a7d94986059284fafbdcf, type: 3}
       propertyPath: m_Name
       value: AK-74
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546989988479296468, guid: 34d71d0ea18a7d94986059284fafbdcf, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34d71d0ea18a7d94986059284fafbdcf, type: 3}

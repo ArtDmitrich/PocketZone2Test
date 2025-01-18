@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Characters
+namespace GameLogic.Characters
 {
     public class MovableCharacter : Character
     {
@@ -9,6 +9,9 @@ namespace Characters
 
         protected void StartMovement(Vector2 direction)
         {
+            var targetRotation = direction.x < 0 ? CharacterDirection.Left : CharacterDirection.Right;
+            CharacterRotator.RotateTo(targetRotation, Model.transform);
+            
             Movement.StartMove(direction);
             Model.PlayLoopAnimation(ModelAnimation.Walk, true);
         }
@@ -18,10 +21,10 @@ namespace Characters
             Movement.StopMove();
             Model.PlayLoopAnimation(ModelAnimation.Walk, false);
         }
-
-        protected override void OnEnable()
+        
+        protected override void Initialization()
         {
-            base.OnEnable();
+            base.Initialization();
             
             Movement.Init(Stats);
         }

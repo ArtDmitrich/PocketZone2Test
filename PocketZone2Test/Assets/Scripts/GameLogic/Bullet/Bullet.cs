@@ -1,4 +1,4 @@
-using Characters;
+using GameLogic.Characters;
 using Services.ObjectPool;
 using UnityEngine;
 using Weapons;

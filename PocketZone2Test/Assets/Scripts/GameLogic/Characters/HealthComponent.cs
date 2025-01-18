@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 
-namespace Characters
+namespace GameLogic.Characters
 {
     public class HealthComponent : MonoBehaviour
     {
         public event Action CharacterDied;
-        public event Action<float> HealthRatioChanged;
+        public event Action<float, float> HealthChanged;
 
         private IHealthStats _characterStats;
         private float _currentHealth;
@@ -15,6 +15,7 @@ namespace Characters
         {
             _characterStats = characterStats;
             _currentHealth = _characterStats.MaxHealth;
+            HealthChanged?.Invoke(_currentHealth, _characterStats.MaxHealth);
         }
 
         public void GetDamage(float value)
@@ -40,6 +41,8 @@ namespace Characters
             {
                 _currentHealth = _characterStats.MaxHealth;
             }
+            
+            HealthChanged?.Invoke(_currentHealth, _characterStats.MaxHealth);
         }
     }
 }

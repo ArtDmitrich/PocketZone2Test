@@ -1,20 +1,35 @@
+using System.Collections.Generic;
 using Characters;
+using GameLogic.Characters;
+using GameLogic.Weapons;
+using Infrastructure;
 using Services.Initialize;
 using Services.Input;
 using Services.Logger;
 using Services.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 public class Test : MonoBehaviour
 {
-    [SerializeField] PlayerCharacter playerCharacter;
+    [SerializeField] PlayerCharacter PlayerCharacterPrefab;
+    [SerializeField] Weapon AK74Prefab;
+    [SerializeField] Weapon MakarovPrefab;
     
     private IMediatorUI _mediator;
     private IInputService _inputService;
+    private DiContainer _container;
     
+    private PlayerCharacter _playerCharacter;
+    private Weapon _aK74;
+    private Weapon _makarov;
+    
+    private LinkedList<Weapon> _weapons = new LinkedList<Weapon>();
+    private LinkedListNode<Weapon> _currentWeapon;
+
     [Inject]
-    private void Construct(IMediatorUI mediator, IInputService inputService)
+    private void Construct(IMediatorUI mediator, IInputService inputService, DiContainer container)
     {
         _mediator = mediator;
         _inputService = inputService;
@@ -24,7 +39,20 @@ public class Test : MonoBehaviour
             input.Init();
         }
         
-        playerCharacter.Initialization(_inputService);
+        _container = container;
+        _playerCharacter = _container.InstantiatePrefabForComponent<PlayerCharacter>(PlayerCharacterPrefab);
+        _playerCharacter.transform.position = Vector3.zero;
+        
+        _aK74 = _container.InstantiatePrefabForComponent<Weapon>(AK74Prefab);
+        _makarov = _container.InstantiatePrefabForComponent<Weapon>(MakarovPrefab);
+        
+        _aK74.gameObject.SetActive(false);
+        _makarov.gameObject.SetActive(false);
+        
+        _weapons.AddLast(_aK74);
+        _weapons.AddLast(_makarov);
+        
+        ChangeWeapon();
     }
     
     public void OpenTest()
@@ -39,7 +67,41 @@ public class Test : MonoBehaviour
 
     public void PlayerAttack()
     {
-        playerCharacter.Attack();
+        _playerCharacter.Attack();
+    }
+
+    public void PlayerDeath()
+    {
+        _playerCharacter.TakeDamage(10f);
+    }
+    
+    public void PlayerHurt()
+    {
+        _playerCharacter.TakeDamage(1f);
+    } 
+    
+    public void RespawnPlayer()
+    {
+        _playerCharacter.RespawnPlayer();
+    }
+
+    public void ChangeWeapon()
+    {
+        if (_weapons.Count == 0)
+        {
+            return;
+        }
+
+        if (_currentWeapon == null || _currentWeapon == _weapons.Last)
+        {
+            _currentWeapon = _weapons.First;
+            _playerCharacter.SetWeapon(_currentWeapon.Value);
+        }
+        else
+        {
+            _currentWeapon = _currentWeapon.Next;
+            _playerCharacter.SetWeapon(_currentWeapon.Value);
+        }
     }
 
     /*private void MoveStart(Vector2 direction)

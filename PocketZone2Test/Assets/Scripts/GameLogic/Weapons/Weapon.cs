@@ -1,8 +1,9 @@
 using Cysharp.Threading.Tasks;
 using GameLogic.Bullet;
 using UnityEngine;
+using Weapons;
 
-namespace Weapons
+namespace GameLogic.Weapons
 {
     [RequireComponent(typeof(WeaponStats))]
     [RequireComponent(typeof(TargetRadar))]

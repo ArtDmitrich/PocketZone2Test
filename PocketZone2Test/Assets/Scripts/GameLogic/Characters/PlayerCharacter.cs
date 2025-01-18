@@ -1,22 +1,24 @@
+using GameLogic.Weapons;
 using Services.Input;
 using UnityEngine;
-using Weapons;
+using Zenject;
 
-namespace Characters
+namespace GameLogic.Characters
 {
     public class PlayerCharacter : MovableCharacter
     {
-        [SerializeField] private Transform _weaponSlot;
-
-        public Weapon _currentWeapon;
+        private Weapon _currentWeapon;
         private IInputService _inputService;
 
-        public void Initialization(IInputService inputService)
+        [Inject]
+        public void Construct(IInputService inputService)
         {
             _inputService = inputService;
 
             _inputService.PlayerMoveStarted += StartMovement;
             _inputService.PlayerMoveStoped += StopMovement;
+            
+            Initialization();
         }
 
         public void Attack()
@@ -26,9 +28,31 @@ namespace Characters
 
         public void SetWeapon(Weapon weapon)
         {
-            _currentWeapon.gameObject.SetActive(false);
+            if (_currentWeapon != null)
+            {
+                _currentWeapon.gameObject.SetActive(false);
+            }
             
+            _currentWeapon = weapon;
+            _currentWeapon.gameObject.SetActive(true);
+            
+            Model.SetWeapon(_currentWeapon.transform);
         }
 
+        public void RespawnPlayer()
+        {
+            Initialization();
+        }
+
+        private void OnDestroy()
+        {
+            if (_inputService == null)
+            {
+                return;
+            }
+            
+            _inputService.PlayerMoveStarted -= StartMovement;
+            _inputService.PlayerMoveStoped -= StopMovement;
+        }
     }
 }

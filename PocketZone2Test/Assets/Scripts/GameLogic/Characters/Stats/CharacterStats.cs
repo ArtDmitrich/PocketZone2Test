@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Characters
+namespace GameLogic.Characters
 {
     public class CharacterStats : MonoBehaviour, IHealthStats, IMovementStats
     {

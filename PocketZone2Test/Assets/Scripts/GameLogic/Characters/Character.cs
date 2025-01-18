@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
-namespace Characters
+namespace GameLogic.Characters
 {
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(CharacterStats))]
@@ -16,6 +17,9 @@ namespace Characters
         
         protected CharacterModel Model { get { return _model ??= GetComponentInChildren<CharacterModel>(); } }
         private CharacterModel _model;
+        
+        private Healthbar Healthbar { get { return _healthbar ??= GetComponentInChildren<Healthbar>(); } }
+        private Healthbar _healthbar;
 
         public virtual void TakeDamage(float damage)
         {
@@ -23,21 +27,28 @@ namespace Characters
             Model.PlayShortAnimation(ModelAnimation.Hurt);
         }
 
-        private void Death()
+        protected virtual void Initialization()
         {
-            CharacterDead?.Invoke(this);
-            Model.PlayShortAnimation(ModelAnimation.Death);
+            Health.Init(Stats);
+            Model.PlayShortAnimation(ModelAnimation.Resurrection);
         }
 
         protected virtual void OnEnable()
         {
             Health.CharacterDied += Death;
-            Health.Init(Stats);
+            Health.HealthChanged += Healthbar.UpdateHealthBar;
         }
 
         protected virtual void OnDisable()
         {
             Health.CharacterDied -= Death;
+            Health.HealthChanged += Healthbar.UpdateHealthBar;
+        }
+        
+        private void Death()
+        {
+            CharacterDead?.Invoke(this);
+            Model.PlayShortAnimation(ModelAnimation.Death);
         }
     }
 }

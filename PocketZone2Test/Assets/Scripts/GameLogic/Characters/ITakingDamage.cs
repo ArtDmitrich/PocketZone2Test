@@ -1,4 +1,4 @@
-namespace Characters
+namespace GameLogic.Characters
 {
     public interface ITakingDamage
     {
