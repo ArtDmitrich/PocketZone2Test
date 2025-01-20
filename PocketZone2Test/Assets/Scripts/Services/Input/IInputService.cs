@@ -7,5 +7,7 @@ namespace Services.Input
     {
         event Action<Vector2> PlayerMoveStarted;
         event Action PlayerMoveStoped;
+
+        void SetEnableToCharacterInput(bool enable);
     }
 }

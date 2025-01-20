@@ -139,7 +139,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8784028532049599943, guid: 5d1615c6d0509724bb064be48484557e, type: 3}
       propertyPath: _meleeAttackDistance
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 8784028532049599946, guid: 5d1615c6d0509724bb064be48484557e, type: 3}
       propertyPath: m_Name

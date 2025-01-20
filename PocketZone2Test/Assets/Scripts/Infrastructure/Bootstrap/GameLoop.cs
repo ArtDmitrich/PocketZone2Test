@@ -73,6 +73,8 @@ namespace Infrastructure.Bootstrap
             _playerCharacter.transform.position = _playerStartPoint.position;
             _playerCharacter.CharacterDead += PlayerLose;
             
+            _inputService.SetEnableToCharacterInput(true);
+            
             _camera.Follow = _playerCharacter.transform;
             _camera.LookAt = _playerCharacter.transform;
             
@@ -106,6 +108,8 @@ namespace Infrastructure.Bootstrap
         private void PlayerLose(Character playerCharacter)
         {
             _playerCharacter.CharacterDead -= PlayerLose;
+            _inputService.SetEnableToCharacterInput(false);
+            _viewMediator.CloseView();
             
             GameEnd();
         }

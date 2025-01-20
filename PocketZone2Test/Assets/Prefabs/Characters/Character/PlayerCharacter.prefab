@@ -300,6 +300,10 @@ PrefabInstance:
       propertyPath: _movementSpeed
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8784028532049599944, guid: 5d1615c6d0509724bb064be48484557e, type: 3}
+      propertyPath: m_Constraints
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8784028532049599945, guid: 5d1615c6d0509724bb064be48484557e, type: 3}
       propertyPath: m_Size.x
       value: 0.82407427
