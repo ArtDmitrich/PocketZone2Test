@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Services.ObjectPool
 {
-    public class ItemManager<T> : Singleton<T> where T : MonoBehaviour
+    public class ItemPoolManager<T> : Singleton<T> where T : MonoBehaviour
     {
         [SerializeField] protected SpawnerSettings _spawnerSettings;
 

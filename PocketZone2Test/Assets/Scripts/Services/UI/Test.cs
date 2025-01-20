@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Characters;
 using GameLogic.Characters;
@@ -18,7 +19,7 @@ public class Test : MonoBehaviour
     [SerializeField] Weapon AK74Prefab;
     [SerializeField] Weapon MakarovPrefab;
     
-    private IMediatorUI _mediator;
+    private IViewMediatorUI _viewMediator;
     private IInputService _inputService;
     private DiContainer _container;
     
@@ -31,11 +32,13 @@ public class Test : MonoBehaviour
     
     private EnemiesController _enemiesController;
     [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
+    [SerializeField] private string _enemyName;
+    
 
     [Inject]
-    private void Construct(IMediatorUI mediator, IInputService inputService, DiContainer container, EnemiesController enemiesController)
+    private void Construct(IViewMediatorUI viewMediator, IInputService inputService, DiContainer container, EnemiesController enemiesController)
     {
-        _mediator = mediator;
+        _viewMediator = viewMediator;
         _inputService = inputService;
 
         if (_inputService is IInitialazable input)
@@ -59,27 +62,15 @@ public class Test : MonoBehaviour
         ChangeWeapon();
         
         _enemiesController = enemiesController;
-        foreach (var spawnPoint in _spawnPoints)
+        
+        if (_enemiesController == null)
         {
-            _enemiesController.SpawnEnemies(spawnPoint);
+            LoggerService.LogError("enemy controller dont inject");
+            return;
         }
     }
+
     
-    public void OpenTest()
-    {
-        _mediator.OpenView(ViewType.Test);
-    }
-
-    public void CloseTest()
-    {
-        _mediator.CloseView();
-    }
-
-    public void PlayerAttack()
-    {
-        _playerCharacter.Attack();
-    }
-
     public void PlayerDeath()
     {
         _playerCharacter.TakeDamage(10f);
@@ -90,10 +81,6 @@ public class Test : MonoBehaviour
         _playerCharacter.TakeDamage(1f);
     } 
     
-    public void RespawnPlayer()
-    {
-        _playerCharacter.RespawnPlayer();
-    }
 
     public void ChangeWeapon()
     {

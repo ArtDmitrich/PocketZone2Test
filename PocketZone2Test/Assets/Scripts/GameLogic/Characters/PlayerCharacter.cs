@@ -1,6 +1,6 @@
 using GameLogic.Weapons;
+using Services.GameEvents;
 using Services.Input;
-using UnityEngine;
 using Zenject;
 
 namespace GameLogic.Characters
@@ -9,23 +9,17 @@ namespace GameLogic.Characters
     {
         private Weapon _currentWeapon;
         private IInputService _inputService;
+        private IGameEvent _gameEvent;
 
         [Inject]
-        public void Construct(IInputService inputService)
+        private void Construct(IInputService inputService, IGameEvent gameEvent)
         {
             _inputService = inputService;
-
-            _inputService.PlayerMoveStarted += StartMovement;
-            _inputService.PlayerMoveStoped += StopMovement;
+            _gameEvent = gameEvent;
             
             Initialize();
         }
-
-        public void Attack()
-        {
-            _currentWeapon.Attack();
-        }
-
+        
         public void SetWeapon(Weapon weapon)
         {
             if (_currentWeapon != null)
@@ -39,20 +33,36 @@ namespace GameLogic.Characters
             Model.SetWeapon(_currentWeapon.transform);
         }
 
-        public void RespawnPlayer()
+        private void Attack()
+        {
+            _currentWeapon.Attack();
+        }
+        
+        private void RespawnPlayer()
         {
             Initialize();
         }
 
-        private void OnDestroy()
+        protected override void OnEnable()
         {
-            if (_inputService == null)
-            {
-                return;
-            }
+            base.OnEnable();
+            
+            _inputService.PlayerMoveStarted += StartMovement;
+            _inputService.PlayerMoveStoped += StopMovement;
+            
+            _gameEvent.AddSub(GameEventType.PlayerShoot, Attack);
+            _gameEvent.AddSub(GameEventType.PlayerRespawn, RespawnPlayer);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
             
             _inputService.PlayerMoveStarted -= StartMovement;
             _inputService.PlayerMoveStoped -= StopMovement;
+            
+            _gameEvent.RemoveSub(GameEventType.PlayerShoot, Attack);
+            _gameEvent.RemoveSub(GameEventType.PlayerRespawn, RespawnPlayer);
         }
     }
 }

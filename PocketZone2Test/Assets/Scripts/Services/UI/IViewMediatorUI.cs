@@ -1,8 +1,7 @@
 namespace Services.UI
 {
-    public interface IMediatorUI
+    public interface IViewMediatorUI
     {
         public void OpenView(ViewType viewType);
-        public void CloseView();
     }
 }

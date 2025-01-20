@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Services.ObjectPool;
 using Services.ObjectPool.ZenjectVariant;
 using Services.StateMachine;
 using UnityEngine;
@@ -9,43 +10,15 @@ namespace GameLogic.Characters
 {
     public class MeleeEnemyCharacter : MovableCharacter
     {
-        public class Factory : PlaceholderFactory<MeleeEnemyCharacter>
-        {
-        
-        }
-        
-        public class Pool : MemoryPool<MeleeEnemyCharacter>
-        {
-            protected override void OnCreated(MeleeEnemyCharacter enemy)
-            {
-                enemy.gameObject.SetActive(false);
-            }
-
-            protected override void OnSpawned(MeleeEnemyCharacter enemy)
-            {
-                enemy.gameObject.SetActive(true);
-            }
-
-            protected override void OnDespawned(MeleeEnemyCharacter enemy)
-            {
-                enemy.gameObject.SetActive(false);
-            }
-        }
-        
         private TargetRadar Radar { get { return _radar ??= GetComponentInChildren<TargetRadar>(); } }
         private TargetRadar _radar;
+        
+        private PooledItem PooledItem { get { return _pooledItem ??= GetComponent<PooledItem>(); } }
+        private PooledItem _pooledItem;
         
         private MeleeEnemyStateMachine _stateMachine;
         private Transform _target;
         private bool _isCanAttack;
-        
-        private Pool _pool;
-
-        [Inject]
-        private void Construct(Pool pool)
-        {
-            _pool = pool;
-        }
         
         public override void Initialize()
         {
@@ -103,7 +76,6 @@ namespace GameLogic.Characters
             base.Death();
             
             ChangeState(new DeathState(this));
-            _pool.Despawn(this);
         }
 
         private void EndAttack()
@@ -113,6 +85,11 @@ namespace GameLogic.Characters
             {
                 takingDamage.TakeDamage(Stats.MeleeDamageValue);
             }
+        }
+
+        private void EndDeath()
+        {
+            PooledItem.Release();
         }
         
         private async UniTask Cooldown()
@@ -134,6 +111,7 @@ namespace GameLogic.Characters
             base.OnEnable();
 
             Model.MeleeAttackEnded += EndAttack;
+            Model.DeathAnimationEnded += EndDeath;
         }
 
         protected override void OnDisable()
@@ -141,6 +119,7 @@ namespace GameLogic.Characters
             base.OnDisable();
 
             Model.MeleeAttackEnded -= EndAttack;
+            Model.DeathAnimationEnded -= EndDeath;
         }
     }
 }

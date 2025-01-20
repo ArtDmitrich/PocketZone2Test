@@ -1,28 +1,28 @@
+using System;
 using System.Collections.Generic;
 using GameLogic.Characters;
-using Services.ObjectPool.ZenjectVariant;
+using Services.Logger;
 using UnityEngine;
-using Zenject;
 
 namespace GameLogic.EnemiesController
 {
     public class EnemiesController : MonoBehaviour
     {
-        private List<MeleeEnemyCharacter> _enemies;
+        public event Action AllEnemiesDie;
         
-        private MeleeEnemyCharacter.Pool _pool;
-
-        [Inject]
-        public void Construct(MeleeEnemyCharacter.Pool meleeEnemyPool)
+        private List<Character> _enemies = new List<Character>();
+        
+        public void SpawnEnemies(Vector2 spawnPoint, string enemyName)
         {
-            _pool = meleeEnemyPool;
-        }
-
-        public void SpawnEnemies(Transform spawnPoint)
-        {
-            var enemy = _pool.Spawn();
-            enemy.transform.position = spawnPoint.position;
-            enemy.transform.rotation = spawnPoint.rotation;
+            var enemy = MeleeEnemiesPoolManager.Instance.GetMeleeEnemy(enemyName);
+            
+            if (enemy == null)
+            {
+                LoggerService.LogError($"{this.name} can`t spawn {enemyName}");
+                return;
+            }
+            
+            enemy.transform.position = spawnPoint;
             enemy.transform.parent = transform;
             
             _enemies.Add(enemy);
@@ -34,7 +34,12 @@ namespace GameLogic.EnemiesController
         private void EnemyDie(Character enemy)
         {
             enemy.CharacterDead -= EnemyDie;
-            _enemies.Remove(enemy as MeleeEnemyCharacter);
+            _enemies.Remove(enemy);
+
+            if (_enemies.Count == 0)
+            {
+                AllEnemiesDie?.Invoke();
+            }
         }
     }
 }

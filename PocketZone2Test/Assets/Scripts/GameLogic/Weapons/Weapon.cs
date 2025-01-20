@@ -36,7 +36,7 @@ namespace GameLogic.Weapons
                 return;
             }
 
-            var bullet = BulletManager.Instance.GetBullet(_bulletName);
+            var bullet = BulletPoolManager.Instance.GetBullet(_bulletName);
 
             if (bullet == null)
             {

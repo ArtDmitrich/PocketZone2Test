@@ -17,6 +17,7 @@ namespace GameLogic.Characters
     public class CharacterModel : MonoBehaviour
     {
         public event Action MeleeAttackEnded;
+        public event Action DeathAnimationEnded;
         
         [SerializeField] private Transform _weaponSlot;
         
@@ -51,6 +52,11 @@ namespace GameLogic.Characters
         private void MeleeAttackEnd()
         {
             MeleeAttackEnded?.Invoke();
+        }
+
+        private void DeathAnimationEnd()
+        {
+            DeathAnimationEnded?.Invoke();
         }
     }
 }

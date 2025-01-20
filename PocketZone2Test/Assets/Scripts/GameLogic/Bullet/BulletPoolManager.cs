@@ -2,7 +2,7 @@ using Services.ObjectPool;
 
 namespace GameLogic.Bullet
 {
-    public class BulletManager : ItemManager<BulletManager>
+    public class BulletPoolManager : ItemPoolManager<BulletPoolManager>
     {
         public Bullet GetBullet(string bulletName)
         {

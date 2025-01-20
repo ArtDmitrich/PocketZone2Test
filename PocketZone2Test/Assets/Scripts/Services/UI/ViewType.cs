@@ -3,6 +3,9 @@ namespace Services.UI
     public enum ViewType
     {
         Test,
-        Inventory
+        Inventory,
+        Menu,
+        GameplayUI,
+        EndPanel
     }
 }
