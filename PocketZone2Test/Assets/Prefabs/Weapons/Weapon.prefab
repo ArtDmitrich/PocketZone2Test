@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7237342319658326603}
   - component: {fileID: 4933389701791445880}
   - component: {fileID: 726500136590581883}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WeaponModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 276777819394810392}
   - component: {fileID: 3213348770699668661}
   - component: {fileID: 2984956059538942575}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,3 +195,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 440ea28076af51a4e802cc504750fc17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bulletName: 
+  _bulletSlot: {fileID: 0}

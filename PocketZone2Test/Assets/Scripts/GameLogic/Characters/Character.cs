@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace GameLogic.Characters
 {
@@ -10,9 +9,11 @@ namespace GameLogic.Characters
     {
         public event Action<Character> CharacterDead;
         
+        [SerializeField] private Collider2D _characterCollider;
+        
         protected CharacterStats Stats { get { return _stats ??= GetComponent<CharacterStats>(); } }
         private CharacterStats _stats;
-        private HealthComponent Health { get { return _health ??= GetComponent<HealthComponent>(); } }
+        protected HealthComponent Health { get { return _health ??= GetComponent<HealthComponent>(); } }
         private HealthComponent _health;
         
         protected CharacterModel Model { get { return _model ??= GetComponentInChildren<CharacterModel>(); } }
@@ -26,11 +27,19 @@ namespace GameLogic.Characters
             Health.GetDamage(damage);
             Model.PlayShortAnimation(ModelAnimation.Hurt);
         }
-
-        protected virtual void Initialization()
+        
+        public virtual void Initialize()
         {
+            _characterCollider.enabled = true;
             Health.Init(Stats);
             Model.PlayShortAnimation(ModelAnimation.Resurrection);
+        }
+        
+        protected virtual void Death()
+        {
+            _characterCollider.enabled = false;
+            CharacterDead?.Invoke(this);
+            Model.PlayShortAnimation(ModelAnimation.Death);
         }
 
         protected virtual void OnEnable()
@@ -43,12 +52,6 @@ namespace GameLogic.Characters
         {
             Health.CharacterDied -= Death;
             Health.HealthChanged += Healthbar.UpdateHealthBar;
-        }
-        
-        private void Death()
-        {
-            CharacterDead?.Invoke(this);
-            Model.PlayShortAnimation(ModelAnimation.Death);
         }
     }
 }

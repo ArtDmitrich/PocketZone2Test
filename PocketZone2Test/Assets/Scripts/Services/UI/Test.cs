@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Characters;
 using GameLogic.Characters;
+using GameLogic.EnemiesController;
 using GameLogic.Weapons;
 using Infrastructure;
 using Services.Initialize;
@@ -27,9 +28,12 @@ public class Test : MonoBehaviour
     
     private LinkedList<Weapon> _weapons = new LinkedList<Weapon>();
     private LinkedListNode<Weapon> _currentWeapon;
+    
+    private EnemiesController _enemiesController;
+    [SerializeField] private List<Transform> _spawnPoints = new List<Transform>();
 
     [Inject]
-    private void Construct(IMediatorUI mediator, IInputService inputService, DiContainer container)
+    private void Construct(IMediatorUI mediator, IInputService inputService, DiContainer container, EnemiesController enemiesController)
     {
         _mediator = mediator;
         _inputService = inputService;
@@ -53,6 +57,12 @@ public class Test : MonoBehaviour
         _weapons.AddLast(_makarov);
         
         ChangeWeapon();
+        
+        _enemiesController = enemiesController;
+        foreach (var spawnPoint in _spawnPoints)
+        {
+            _enemiesController.SpawnEnemies(spawnPoint);
+        }
     }
     
     public void OpenTest()

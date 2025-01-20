@@ -6,6 +6,13 @@ namespace GameLogic.Characters
     {
         private IMovable Movement { get { return _movement ??= GetComponent<IMovable>(); } }
         private IMovable _movement;
+        
+        public override void Initialize()
+        {
+            base.Initialize();
+            
+            Movement.Init(Stats);
+        }
 
         protected void StartMovement(Vector2 direction)
         {
@@ -20,13 +27,6 @@ namespace GameLogic.Characters
         {
             Movement.StopMove();
             Model.PlayLoopAnimation(ModelAnimation.Walk, false);
-        }
-        
-        protected override void Initialization()
-        {
-            base.Initialization();
-            
-            Movement.Init(Stats);
         }
     }
 }

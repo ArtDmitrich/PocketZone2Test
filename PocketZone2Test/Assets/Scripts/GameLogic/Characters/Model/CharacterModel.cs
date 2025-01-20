@@ -1,3 +1,4 @@
+using System;
 using GameLogic.Weapons;
 using UnityEngine;
 
@@ -8,12 +9,15 @@ namespace GameLogic.Characters
         Resurrection,
         Walk,
         Death,
-        Hurt
+        Hurt,
+        Attack
     }
     
     [RequireComponent(typeof(Animator))]
     public class CharacterModel : MonoBehaviour
     {
+        public event Action MeleeAttackEnded;
+        
         [SerializeField] private Transform _weaponSlot;
         
         private Animator Anim { get { return _anim ??= GetComponent<Animator>(); } }
@@ -42,6 +46,11 @@ namespace GameLogic.Characters
             _currentWeapon.parent = _weaponSlot;
             _currentWeapon.localPosition = Vector3.zero;
             _currentWeapon.localScale = Vector3.one;
+        }
+        
+        private void MeleeAttackEnd()
+        {
+            MeleeAttackEnded?.Invoke();
         }
     }
 }

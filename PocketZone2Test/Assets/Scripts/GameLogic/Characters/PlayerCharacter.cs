@@ -18,7 +18,7 @@ namespace GameLogic.Characters
             _inputService.PlayerMoveStarted += StartMovement;
             _inputService.PlayerMoveStoped += StopMovement;
             
-            Initialization();
+            Initialize();
         }
 
         public void Attack()
@@ -41,7 +41,7 @@ namespace GameLogic.Characters
 
         public void RespawnPlayer()
         {
-            Initialization();
+            Initialize();
         }
 
         private void OnDestroy()

@@ -250,11 +250,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8784028532049599943, guid: 5d1615c6d0509724bb064be48484557e, type: 3}
       propertyPath: _maxHealth
-      value: 5
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8784028532049599943, guid: 5d1615c6d0509724bb064be48484557e, type: 3}
       propertyPath: _movementSpeed
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8784028532049599945, guid: 5d1615c6d0509724bb064be48484557e, type: 3}
       propertyPath: m_Size.x
@@ -313,3 +313,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705d4a02efeeeb343a7db3c6a3e32d31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterCollider: {fileID: 47866679685813178}
+--- !u!61 &47866679685813178 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8784028532049599945, guid: 5d1615c6d0509724bb064be48484557e, type: 3}
+  m_PrefabInstance: {fileID: 8740692020734348915}
+  m_PrefabAsset: {fileID: 0}
