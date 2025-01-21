@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 286dbf0d610cd5b44a6506fbcdd0b564, type: 3}
   m_Name: DroppedItemSettings
   m_EditorClassIdentifier: 
-  _pooledItems: []
+  _pooledItems:
+  - Key: Ammunition
+    Value: {fileID: 6120654025591510449, guid: 3337d70874e2b3349a3e9c773529bccb, type: 3}
+  - Key: SovietBag
+    Value: {fileID: 3944938921947546936, guid: 48bf8095cb20ffe4fa3e6f178308f433, type: 3}

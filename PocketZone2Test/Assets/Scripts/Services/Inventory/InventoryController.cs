@@ -9,7 +9,12 @@ namespace Services.Inventory
 {
     public class InventoryController : MonoBehaviour
     {
-        [SerializeField] private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
+        public List<InventoryItem> InventoryItems
+        {
+            get => _inventoryItems;
+            set => _inventoryItems = value;
+        }
+        private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
         
         private IViewMediatorUI _viewMediator;
         private InventoryView _inventoryView;

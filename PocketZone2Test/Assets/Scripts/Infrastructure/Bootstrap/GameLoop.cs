@@ -8,6 +8,8 @@ using GameLogic.Weapons;
 using Services.GameEvents;
 using Services.Initialize;
 using Services.Input;
+using Services.Inventory;
+using Services.SaveSystem;
 using Services.UI;
 using UnityEngine;
 using Zenject;
@@ -41,9 +43,11 @@ namespace Infrastructure.Bootstrap
         private IViewMediatorUI _viewMediator;
         private IInputService _inputService;
         private IGameEvent _gameEvent;
+        private InventoryController _inventoryController;
     
         [Inject]
-        private void Construct(IViewMediatorUI viewMediator, IInputService inputService, EnemiesController enemiesController, IGameEvent gameEvent, DiContainer container)
+        private void Construct(IViewMediatorUI viewMediator, IInputService inputService, EnemiesController enemiesController,
+            IGameEvent gameEvent, DiContainer container, InventoryController inventoryController)
         {
             _viewMediator = viewMediator;
             _inputService = inputService;
@@ -57,12 +61,15 @@ namespace Infrastructure.Bootstrap
             _gameEvent = gameEvent;
             
             _container = container;
-            
+            _inventoryController = inventoryController;
         }
 
         private void Start()
         {
             _viewMediator.OpenView(ViewType.Menu);
+            
+            //LoadData
+            LoadData();
         }
 
         private void GameStart()
@@ -119,6 +126,7 @@ namespace Infrastructure.Bootstrap
             await UniTask.DelayFrame(2000);
             
             //save progress
+            SaveData();
             
             _viewMediator.OpenView(ViewType.EndPanel);
         }
@@ -139,6 +147,26 @@ namespace Infrastructure.Bootstrap
             {
                 _currentWeapon = _currentWeapon.Next;
                 _playerCharacter.SetWeapon(_currentWeapon.Value);
+            }
+        }
+
+        private void SaveData()
+        {
+            var gameData = new GameData()
+            {
+                InventoryItems = _inventoryController.InventoryItems,
+            };
+            
+            SaveSystem.SaveData(gameData);
+        }
+
+        private void LoadData()
+        {
+            var loadedData = SaveSystem.LoadData();
+            
+            if (loadedData != null)
+            {
+                _inventoryController.InventoryItems = loadedData.InventoryItems;
             }
         }
 
