@@ -14,8 +14,8 @@ namespace Services.Inventory
             get => _inventoryItems;
             set => _inventoryItems = value;
         }
-        private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
         
+        private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
         private IViewMediatorUI _viewMediator;
         private InventoryView _inventoryView;
         private IGameEvent _gameEvent;

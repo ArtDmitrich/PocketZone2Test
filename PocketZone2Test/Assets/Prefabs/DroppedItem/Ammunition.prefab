@@ -16,6 +16,10 @@ PrefabInstance:
       value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7103909530500403215, guid: 1f2f5782cb3bcb94a99008d1cb260615, type: 3}
+      propertyPath: IconPath
+      value: Sprites/DroppedItems/5.45x39
+      objectReference: {fileID: 0}
+    - target: {fileID: 7103909530500403215, guid: 1f2f5782cb3bcb94a99008d1cb260615, type: 3}
       propertyPath: _stackSize
       value: 30
       objectReference: {fileID: 0}

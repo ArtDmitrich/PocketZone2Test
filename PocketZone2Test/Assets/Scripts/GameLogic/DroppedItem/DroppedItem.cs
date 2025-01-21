@@ -8,9 +8,9 @@ namespace GameLogic.DroppedItem
     public class DroppedItem : MonoBehaviour
     {
         public event Action<DroppedItem> ItemPickUped;
-        
-        public Sprite ItemSprite => SpriteRenderer.sprite;
         public int StackSize => _stackSize;
+
+        public string IconPath;
         
         [SerializeField] private LayerMask _targetLayer;
         [SerializeField] private int _stackSize;

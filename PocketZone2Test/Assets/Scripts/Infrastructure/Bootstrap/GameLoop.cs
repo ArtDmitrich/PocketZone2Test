@@ -9,6 +9,7 @@ using Services.GameEvents;
 using Services.Initialize;
 using Services.Input;
 using Services.Inventory;
+using Services.Logger;
 using Services.SaveSystem;
 using Services.UI;
 using UnityEngine;
@@ -152,11 +153,10 @@ namespace Infrastructure.Bootstrap
 
         private void SaveData()
         {
-            var gameData = new GameData()
-            {
-                InventoryItems = _inventoryController.InventoryItems,
-            };
-            
+            var gameData = new GameData();
+            gameData.SetData(_inventoryController.InventoryItems);
+            LoggerService.Log($"{gameData.InventoryItemDatas.Count} inventory items saved.");
+
             SaveSystem.SaveData(gameData);
         }
 
@@ -166,7 +166,8 @@ namespace Infrastructure.Bootstrap
             
             if (loadedData != null)
             {
-                _inventoryController.InventoryItems = loadedData.InventoryItems;
+                LoggerService.Log($"{loadedData.InventoryItemDatas.Count} inventory items loaded.");
+                _inventoryController.InventoryItems = loadedData.GetInventoryItems();
             }
         }
 

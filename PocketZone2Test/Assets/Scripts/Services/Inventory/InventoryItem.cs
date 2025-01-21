@@ -1,4 +1,6 @@
 using System;
+using Services.Helper;
+using Services.SaveSystem;
 using UnityEngine;
 
 namespace Services.Inventory
@@ -8,6 +10,15 @@ namespace Services.Inventory
     {
         public string ItemName; 
         public Sprite Icon;      
-        public int StackSize;  
+        public string IconPath;
+        public int StackSize;
+
+        public InventoryItem(string itemName, string iconPath, int stackSize)
+        {
+            ItemName = itemName;
+            IconPath = iconPath;
+            StackSize = stackSize;
+            Icon = HelperMethods.LoadIcon(iconPath);
+        }
     }
 }

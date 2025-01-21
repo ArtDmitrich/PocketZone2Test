@@ -15,6 +15,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 7103909530500403215, guid: 1f2f5782cb3bcb94a99008d1cb260615, type: 3}
+      propertyPath: IconPath
+      value: Sprites/DroppedItems/SovietBag
+      objectReference: {fileID: 0}
     - target: {fileID: 7136110362458858057, guid: 1f2f5782cb3bcb94a99008d1cb260615, type: 3}
       propertyPath: m_Name
       value: SovietBag

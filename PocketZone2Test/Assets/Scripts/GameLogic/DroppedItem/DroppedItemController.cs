@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Services.Helper;
 using Services.Inventory;
 using UnityEngine;
 using Zenject;
@@ -38,12 +39,7 @@ namespace GameLogic.DroppedItem
 
         private void AddItemToInventory(DroppedItem droppedItem)
         {
-            var item = new InventoryItem()
-            {
-                ItemName = droppedItem.name,
-                StackSize = droppedItem.StackSize,
-                Icon = droppedItem.ItemSprite,
-            };
+            var item = new InventoryItem(droppedItem.name, droppedItem.IconPath, droppedItem.StackSize);
             
             _inventoryController.AddItemToInventory(item);
             droppedItem.ItemPickUped -= AddItemToInventory;
