@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Services.UI;
 using UnityEngine;
 
-namespace Services.InventoryAndDroppedItem
+namespace Services.Inventory
 {
     public class InventoryView : View
     {

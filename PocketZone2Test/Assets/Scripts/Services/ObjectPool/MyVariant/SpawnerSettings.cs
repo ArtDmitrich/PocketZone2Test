@@ -6,7 +6,7 @@ namespace Services.ObjectPool
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/SpawnerSettings", order = 1)]
     public class SpawnerSettings : ScriptableObject
     {
-        [SerializeField] private List<PooledItemData> _pooledItems;
+        [SerializeField] private List<PooledItemData> _pooledItems = new List<PooledItemData>();
 
         public PooledItem GetPooledItem(string itemName)
         {

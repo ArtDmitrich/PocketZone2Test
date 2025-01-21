@@ -93,7 +93,7 @@ namespace Infrastructure.Bootstrap
             
             for (var i = 0; i < _enemyCount; i++)
             {
-                var spawnPoint = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
+                var spawnPoint = new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f));
                 _enemiesController.SpawnEnemies(spawnPoint, _enemyName);
             }
         }

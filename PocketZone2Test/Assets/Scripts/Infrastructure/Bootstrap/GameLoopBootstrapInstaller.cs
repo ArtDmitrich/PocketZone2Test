@@ -1,8 +1,9 @@
 using GameLogic.Characters;
+using GameLogic.DroppedItem;
 using GameLogic.EnemiesController;
 using Services.GameEvents;
 using Services.Input;
-using Services.InventoryAndDroppedItem;
+using Services.Inventory;
 using Services.ObjectPool.ZenjectVariant;
 using Services.UI;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace Infrastructure.Bootstrap
         [SerializeField] private EnemiesController _enemiesController;
         [SerializeField] private InventoryView _inventoryView;
         [SerializeField] private InventoryController _inventoryController;
+        [SerializeField] private DroppedItemController _droppedItemController;
     
         public override void InstallBindings()
         {
@@ -26,6 +28,7 @@ namespace Infrastructure.Bootstrap
             BindGameEvents();
             BindInventoryView();
             BindInventoryController();
+            BindDroppedItemController();
         }
     
         private void BindMediatorUI()
@@ -56,6 +59,11 @@ namespace Infrastructure.Bootstrap
         private void BindInventoryController()
         {
             Container.Bind<InventoryController>().FromInstance(_inventoryController).AsSingle();
+        }
+        
+        private void BindDroppedItemController()
+        {
+            Container.Bind<DroppedItemController>().FromInstance(_droppedItemController).AsSingle();
         }
     }
 }

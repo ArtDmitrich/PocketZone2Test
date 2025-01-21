@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Services.GameEvents;
 using Services.Logger;
@@ -6,11 +5,11 @@ using Services.UI;
 using UnityEngine;
 using Zenject;
 
-namespace Services.InventoryAndDroppedItem
+namespace Services.Inventory
 {
     public class InventoryController : MonoBehaviour
     {
-        private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
+        [SerializeField] private List<InventoryItem> _inventoryItems = new List<InventoryItem>();
         
         private IViewMediatorUI _viewMediator;
         private InventoryView _inventoryView;
@@ -26,16 +25,15 @@ namespace Services.InventoryAndDroppedItem
 
         public void AddItemToInventory(InventoryItem inventoryItem)
         {
-            if (TryFindItemInInventory(inventoryItem.itemName, out var foundInventoryItem))
+            if (TryFindItemInInventory(inventoryItem.ItemName, out var foundInventoryItem))
             {
-                foundInventoryItem.stackSize += inventoryItem.stackSize;
-                
+                foundInventoryItem.StackSize += inventoryItem.StackSize;
             }
             else
             {
                 if (_inventoryItems.Count > _inventoryView.MAX_COUNT_SLOTS)
                 {
-                    LoggerService.LogError($"Inventory Full. {inventoryItem.itemName} don`t added.");
+                    LoggerService.LogError($"Inventory Full. {inventoryItem.ItemName} don`t added.");
                     return;
                 }
                 
@@ -50,7 +48,8 @@ namespace Services.InventoryAndDroppedItem
                 _inventoryItems.Remove(inventoryItem);
             }
             
-            _inventoryView.UpdateInventoryView(_inventoryItems);
+            _viewMediator.CloseView();
+            OpenInventory();
         }
 
         private void OpenInventory()
@@ -68,7 +67,7 @@ namespace Services.InventoryAndDroppedItem
         {
             foreach (var item in _inventoryItems)
             {
-                if (item.itemName == itemName)
+                if (item.ItemName == itemName)
                 {
                     targetItem = item;
                     return true;
