@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using GameLogic.Characters;
+using GameLogic.DroppedItem;
 using Services.Logger;
 using UnityEngine;
+using Zenject;
 
 namespace GameLogic.EnemiesController
 {
@@ -11,6 +13,14 @@ namespace GameLogic.EnemiesController
         public event Action AllEnemiesDie;
         
         private List<Character> _enemies = new List<Character>();
+        
+        private DroppedItemController _droppedItemController;
+        
+        [Inject]
+        private void Construct(DroppedItemController droppedItem)
+        {
+            _droppedItemController = droppedItem;
+        }
         
         public void SpawnEnemies(Vector2 spawnPoint, string enemyName)
         {
@@ -35,6 +45,8 @@ namespace GameLogic.EnemiesController
         {
             enemy.CharacterDead -= EnemyDie;
             _enemies.Remove(enemy);
+            
+            _droppedItemController.SeRandomDroppedItem(enemy.transform.position);
 
             if (_enemies.Count == 0)
             {

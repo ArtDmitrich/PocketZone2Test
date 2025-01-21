@@ -8,7 +8,9 @@ public class EventButtonUI : MonoBehaviour
     public event Action<GameEventType> OnClick;
     
     [SerializeField] private GameEventType _gameEventType;
-    [SerializeField] private Button _button;
+    
+    private Button Button { get { return _button ??= GetComponent<Button>(); } }
+    private Button _button;
 
     private void Click()
     {
@@ -17,11 +19,11 @@ public class EventButtonUI : MonoBehaviour
 
     private void OnEnable()
     {
-        _button.onClick.AddListener(Click);
+        Button.onClick.AddListener(Click);
     }
 
     private void OnDisable()
     {
-        _button.onClick.RemoveListener(Click);
+        Button.onClick.RemoveListener(Click);
     }
 }

@@ -11,6 +11,18 @@ namespace Services.Input
 
         private InputActions _inputActions;
 
+        public void SetEnableToCharacterInput(bool enable)
+        {
+            if (enable)
+            {
+                _inputActions.CharacterInput.Enable();
+            }
+            else
+            {
+                _inputActions.CharacterInput.Disable();
+            }
+        }
+
         public void Init()
         {
             _inputActions = new InputActions();

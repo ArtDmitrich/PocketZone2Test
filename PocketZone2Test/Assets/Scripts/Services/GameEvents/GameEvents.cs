@@ -32,11 +32,10 @@ namespace Services.GameEvents
     {
         GameStart,
         GameOver,
-        GameRestarted,
-        GamePaused,
-        GameResumed,
         PlayerShoot,
         PlayerRespawn,
-        ChangeWeapon
+        ChangeWeapon,
+        OpenInventory,
+        CloseInventory
     }
 }

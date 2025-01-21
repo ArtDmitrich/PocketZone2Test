@@ -73,6 +73,8 @@ namespace Infrastructure.Bootstrap
             _playerCharacter.transform.position = _playerStartPoint.position;
             _playerCharacter.CharacterDead += PlayerLose;
             
+            _inputService.SetEnableToCharacterInput(true);
+            
             _camera.Follow = _playerCharacter.transform;
             _camera.LookAt = _playerCharacter.transform;
             
@@ -91,7 +93,7 @@ namespace Infrastructure.Bootstrap
             
             for (var i = 0; i < _enemyCount; i++)
             {
-                var spawnPoint = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
+                var spawnPoint = new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f));
                 _enemiesController.SpawnEnemies(spawnPoint, _enemyName);
             }
         }
@@ -106,6 +108,8 @@ namespace Infrastructure.Bootstrap
         private void PlayerLose(Character playerCharacter)
         {
             _playerCharacter.CharacterDead -= PlayerLose;
+            _inputService.SetEnableToCharacterInput(false);
+            _viewMediator.CloseView();
             
             GameEnd();
         }
