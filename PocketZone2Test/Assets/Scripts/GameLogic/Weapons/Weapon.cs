@@ -22,25 +22,25 @@ namespace GameLogic.Weapons
 
         private bool _isCanAttack = true;
 
-        public void Attack()
+        public bool TryAttack()
         {
             if (!_isCanAttack)
             {
-                return;
+                return false;
             }
 
             var target = Radar.GetNearestTarget();
 
             if (target == null)
             {
-                return;
+                return false;
             }
 
             var bullet = BulletPoolManager.Instance.GetBullet(_bulletName);
 
             if (bullet == null)
             {
-                return;
+                return false;
             }
             
             bullet.Initialization(Random.Range(Stats.MinDamage, Stats.MaxDamage), Radar.TargetType);
@@ -50,6 +50,8 @@ namespace GameLogic.Weapons
 
             Model.PlayAttackAnimation();
             Cooldown();
+            
+            return true;
         }
 
         private async UniTask Cooldown()

@@ -8,13 +8,15 @@ namespace Services.Inventory
     [Serializable]
     public class InventoryItem
     {
+        public InventoryItemType ItemType;
         public string ItemName; 
         public Sprite Icon;      
         public string IconPath;
         public int StackSize;
 
-        public InventoryItem(string itemName, string iconPath, int stackSize)
+        public InventoryItem(InventoryItemType  itemType, string itemName, string iconPath, int stackSize)
         {
+            ItemType = itemType;
             ItemName = itemName;
             IconPath = iconPath;
             StackSize = stackSize;

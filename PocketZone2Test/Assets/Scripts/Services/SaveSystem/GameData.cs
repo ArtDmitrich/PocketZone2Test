@@ -35,7 +35,7 @@ namespace Services.SaveSystem
 
             foreach (var itemData in InventoryItemDatas)
             {
-                var item = new InventoryItem(itemData.ItemName, itemData.IconPath, itemData.StackSize);
+                var item = new InventoryItem(itemData.ItemType, itemData.ItemName, itemData.IconPath, itemData.StackSize);
                 inventoryItems.Add(item);
             }
             

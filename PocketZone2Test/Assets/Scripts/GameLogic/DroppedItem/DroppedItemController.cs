@@ -28,7 +28,12 @@ namespace GameLogic.DroppedItem
             var randomIndex = Random.Range(0, _droppedItemNames.Count);
             var randomDroppedItem = _droppedItemNames[randomIndex];
             
-            var item = DroppedItemPoolManager.Instance.GetDroppedItem(randomDroppedItem);
+            SetDroppedItem(position, randomDroppedItem);
+        }
+
+        public void SetDroppedItem(Vector2 position, string droppedItemName)
+        {
+            var item = DroppedItemPoolManager.Instance.GetDroppedItem(droppedItemName);
 
             if (item != null)
             {
@@ -39,7 +44,7 @@ namespace GameLogic.DroppedItem
 
         private void AddItemToInventory(DroppedItem droppedItem)
         {
-            var item = new InventoryItem(droppedItem.name, droppedItem.IconPath, droppedItem.StackSize);
+            var item = new InventoryItem(droppedItem.ItemType, droppedItem.name, droppedItem.IconPath, droppedItem.StackSize);
             
             _inventoryController.AddItemToInventory(item);
             droppedItem.ItemPickUped -= AddItemToInventory;

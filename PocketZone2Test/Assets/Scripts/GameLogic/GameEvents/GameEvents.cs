@@ -32,7 +32,8 @@ namespace Services.GameEvents
     {
         GameStart,
         GameOver,
-        PlayerShoot,
+        PlayerTryShoot,
+        AmmoNotEnought,
         PlayerRespawn,
         ChangeWeapon,
         OpenInventory,

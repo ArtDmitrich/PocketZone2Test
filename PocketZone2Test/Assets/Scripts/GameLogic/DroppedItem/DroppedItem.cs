@@ -11,12 +11,10 @@ namespace GameLogic.DroppedItem
         public int StackSize => _stackSize;
 
         public string IconPath;
+        public InventoryItemType ItemType;
         
         [SerializeField] private LayerMask _targetLayer;
         [SerializeField] private int _stackSize;
-    
-        private SpriteRenderer SpriteRenderer { get { return  _spriteRenderer ??= GetComponent<SpriteRenderer>();  }}
-        private SpriteRenderer _spriteRenderer;
         
         private PooledItem PooledItem { get { return _pooledItem ??= GetComponent<PooledItem>(); } }
         private PooledItem _pooledItem;

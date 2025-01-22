@@ -1,26 +1,29 @@
 using GameLogic.Weapons;
 using Services.GameEvents;
 using Services.Input;
+using UnityEngine;
 using Zenject;
 
 namespace GameLogic.Characters
 {
     public class PlayerCharacter : MovableCharacter
     {
-        private Weapon _currentWeapon;
+        private Transform _currentWeapon;
         private IInputService _inputService;
         private IGameEvent _gameEvent;
+        private WeaponsCotroller _weaponsCotroller;
 
         [Inject]
-        private void Construct(IInputService inputService, IGameEvent gameEvent)
+        private void Construct(IInputService inputService, IGameEvent gameEvent, WeaponsCotroller weaponsCotroller)
         {
             _inputService = inputService;
             _gameEvent = gameEvent;
+            _weaponsCotroller = weaponsCotroller;
             
             Initialize();
         }
         
-        public void SetWeapon(Weapon weapon)
+        private void SetWeapon(Transform weapon)
         {
             if (_currentWeapon != null)
             {
@@ -31,11 +34,6 @@ namespace GameLogic.Characters
             _currentWeapon.gameObject.SetActive(true);
             
             Model.SetWeapon(_currentWeapon.transform);
-        }
-
-        private void Attack()
-        {
-            _currentWeapon.Attack();
         }
         
         private void RespawnPlayer()
@@ -49,8 +47,9 @@ namespace GameLogic.Characters
             
             _inputService.PlayerMoveStarted += StartMovement;
             _inputService.PlayerMoveStoped += StopMovement;
+
+            _weaponsCotroller.OnWeaponSetted += SetWeapon;
             
-            _gameEvent.AddSub(GameEventType.PlayerShoot, Attack);
             _gameEvent.AddSub(GameEventType.PlayerRespawn, RespawnPlayer);
         }
 
@@ -60,8 +59,9 @@ namespace GameLogic.Characters
             
             _inputService.PlayerMoveStarted -= StartMovement;
             _inputService.PlayerMoveStoped -= StopMovement;
+
+            _weaponsCotroller.OnWeaponSetted -= SetWeapon;
             
-            _gameEvent.RemoveSub(GameEventType.PlayerShoot, Attack);
             _gameEvent.RemoveSub(GameEventType.PlayerRespawn, RespawnPlayer);
         }
     }
