@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Cinemachine;
 using Cysharp.Threading.Tasks;
 using GameLogic.Characters;
+using GameLogic.DroppedItem;
 using GameLogic.EnemiesController;
-using GameLogic.Weapons;
 using Services.GameEvents;
 using Services.Initialize;
 using Services.Input;
@@ -25,30 +23,26 @@ namespace Infrastructure.Bootstrap
         [SerializeField] private PlayerCharacter _playerCharacterPrefab;
         [SerializeField] private Transform _playerStartPoint;
         
-        [SerializeField] private Weapon AK74Prefab;
-        [SerializeField] private Weapon MakarovPrefab;
-        
         [SerializeField] private string _enemyName;
         [SerializeField] private int _enemyCount;
+        
+        [SerializeField] private string _firstDroppedItemName;
+        [SerializeField] private Transform _firstDroppedItemPos;
         
         private DiContainer _container;
         private PlayerCharacter _playerCharacter;
         private EnemiesController _enemiesController;
         
-        private Weapon _aK74;
-        private Weapon _makarov;
-    
-        private LinkedList<Weapon> _weapons = new LinkedList<Weapon>();
-        private LinkedListNode<Weapon> _currentWeapon;
-        
         private IViewMediatorUI _viewMediator;
         private IInputService _inputService;
         private IGameEvent _gameEvent;
         private InventoryController _inventoryController;
+        private DroppedItemController _droppedItemController;
     
         [Inject]
-        private void Construct(IViewMediatorUI viewMediator, IInputService inputService, EnemiesController enemiesController,
-            IGameEvent gameEvent, DiContainer container, InventoryController inventoryController)
+        private void Construct(IViewMediatorUI viewMediator, IInputService inputService,
+            EnemiesController enemiesController, IGameEvent gameEvent, DiContainer container, 
+            InventoryController inventoryController, DroppedItemController droppedItemController)
         {
             _viewMediator = viewMediator;
             _inputService = inputService;
@@ -60,9 +54,9 @@ namespace Infrastructure.Bootstrap
             
             _enemiesController = enemiesController;
             _gameEvent = gameEvent;
-            
             _container = container;
             _inventoryController = inventoryController;
+            _droppedItemController = droppedItemController;
         }
 
         private void Start()
@@ -80,23 +74,13 @@ namespace Infrastructure.Bootstrap
             _playerCharacter = _container.InstantiatePrefabForComponent<PlayerCharacter>(_playerCharacterPrefab);
             _playerCharacter.transform.position = _playerStartPoint.position;
             _playerCharacter.CharacterDead += PlayerLose;
+            _gameEvent.InvokeEvent(GameEventType.ChangeWeapon);
             
             _inputService.SetEnableToCharacterInput(true);
             
             _camera.Follow = _playerCharacter.transform;
             _camera.LookAt = _playerCharacter.transform;
             
-            _aK74 = _container.InstantiatePrefabForComponent<Weapon>(AK74Prefab);
-            _makarov = _container.InstantiatePrefabForComponent<Weapon>(MakarovPrefab);
-        
-            _aK74.gameObject.SetActive(false);
-            _makarov.gameObject.SetActive(false);
-        
-            _weapons.AddLast(_aK74);
-            _weapons.AddLast(_makarov);
-        
-            ChangeWeapon();
-
             _enemiesController.AllEnemiesDie += PlayerWin;
             
             for (var i = 0; i < _enemyCount; i++)
@@ -104,6 +88,8 @@ namespace Infrastructure.Bootstrap
                 var spawnPoint = new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f));
                 _enemiesController.SpawnEnemies(spawnPoint, _enemyName);
             }
+            
+            _droppedItemController.SetDroppedItem(_firstDroppedItemPos.position ,_firstDroppedItemName);
         }
 
         private void PlayerWin()
@@ -132,32 +118,13 @@ namespace Infrastructure.Bootstrap
             _viewMediator.OpenView(ViewType.EndPanel);
         }
         
-        private void ChangeWeapon()
-        {
-            if (_weapons.Count == 0)
-            {
-                return;
-            }
-
-            if (_currentWeapon == null || _currentWeapon == _weapons.Last)
-            {
-                _currentWeapon = _weapons.First;
-                _playerCharacter.SetWeapon(_currentWeapon.Value);
-            }
-            else
-            {
-                _currentWeapon = _currentWeapon.Next;
-                _playerCharacter.SetWeapon(_currentWeapon.Value);
-            }
-        }
-
         private void SaveData()
         {
             var gameData = new GameData();
             gameData.SetData(_inventoryController.InventoryItems);
-            LoggerService.Log($"{gameData.InventoryItemDatas.Count} inventory items saved.");
-
+            
             SaveSystem.SaveData(gameData);
+            LoggerService.Log($"{gameData.InventoryItemDatas.Count} inventory items saved.");
         }
 
         private void LoadData()
@@ -167,21 +134,24 @@ namespace Infrastructure.Bootstrap
             if (loadedData != null)
             {
                 LoggerService.Log($"{loadedData.InventoryItemDatas.Count} inventory items loaded.");
-                _inventoryController.InventoryItems = loadedData.GetInventoryItems();
+                
+                var loadedItems = loadedData.GetInventoryItems();
+                foreach (var item in loadedItems)
+                {
+                    _inventoryController.AddItemToInventory(item);
+                }
             }
         }
 
         private void OnEnable()
         {
             _gameEvent.AddSub(GameEventType.GameStart, GameStart);
-            _gameEvent.AddSub(GameEventType.ChangeWeapon, ChangeWeapon);
             _gameEvent.AddSub(GameEventType.GameOver, GameEnd);
         }
 
         private void OnDisable()
         {
             _gameEvent.RemoveSub(GameEventType.GameStart, GameStart);
-            _gameEvent.RemoveSub(GameEventType.ChangeWeapon, ChangeWeapon);
             _gameEvent.RemoveSub(GameEventType.GameOver, GameEnd);
         }
     }

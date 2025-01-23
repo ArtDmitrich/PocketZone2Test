@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Services.GameEvents;
 using Services.Logger;
@@ -9,6 +10,10 @@ namespace Services.Inventory
 {
     public class InventoryController : MonoBehaviour
     {
+        public event Action<InventoryItem> OnInventoryItemAdded;
+        public event Action<InventoryItem> OnInventoryItemRemoved;
+        public event Action<InventoryItem> OnInventoryItemStackSizeChanged;
+        
         public List<InventoryItem> InventoryItems
         {
             get => _inventoryItems;
@@ -33,6 +38,7 @@ namespace Services.Inventory
             if (TryFindItemInInventory(inventoryItem.ItemName, out var foundInventoryItem))
             {
                 foundInventoryItem.StackSize += inventoryItem.StackSize;
+                OnInventoryItemStackSizeChanged?.Invoke(foundInventoryItem);
             }
             else
             {
@@ -43,18 +49,19 @@ namespace Services.Inventory
                 }
                 
                 _inventoryItems.Add(inventoryItem);
+                OnInventoryItemAdded?.Invoke(inventoryItem);
             }
         }
 
         private void RemoveItemFromInventory(InventoryItem inventoryItem)
         {
-            if (_inventoryItems.Contains(inventoryItem))
+            if (!_inventoryItems.Contains(inventoryItem))
             {
-                _inventoryItems.Remove(inventoryItem);
+                return;
             }
             
-            _viewMediator.CloseView();
-            OpenInventory();
+            _inventoryItems.Remove(inventoryItem);
+            OnInventoryItemRemoved?.Invoke(inventoryItem);
         }
 
         private void OpenInventory()
