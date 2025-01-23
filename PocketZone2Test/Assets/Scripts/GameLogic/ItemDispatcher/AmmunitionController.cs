@@ -10,8 +10,21 @@ namespace GameLogic.ItemDispatcher
     public class AmmunitionController : MonoBehaviour
     {
         public event Action<int> AmmunitionCountChanged;
-        
-        private InventoryItem _ammunition;
+
+        public int CurrentAmmunitionCount
+        {
+            get
+            {
+                if (_currentAmmunition == null)
+                {
+                    return 0;    
+                }
+                
+                return _currentAmmunition.StackSize;
+            }
+        }
+
+        private InventoryItem _currentAmmunition;
         
         private IGameEvent _gameEvent;
 
@@ -23,57 +36,31 @@ namespace GameLogic.ItemDispatcher
 
         public void AddAmmunition(InventoryItem ammunition)
         {
-            _ammunition = ammunition;
-            AmmunitionCountChanged?.Invoke(_ammunition.StackSize);
+            _currentAmmunition = ammunition;
+            AmmunitionCountChanged?.Invoke(_currentAmmunition.StackSize);
         }
 
         public void RemoveAmmunition(InventoryItem ammunition)
         {
-            if (_ammunition == ammunition)
+            if (_currentAmmunition == ammunition)
             {
-                _ammunition = null;
+                _currentAmmunition = null;
                 AmmunitionCountChanged?.Invoke(0);
             }
         }
         
         public void UpdateAmmunitionCount(InventoryItem ammunition)
         {
-            if (_ammunition == ammunition)
+            if (_currentAmmunition == ammunition)
             {
-                AmmunitionCountChanged?.Invoke(_ammunition.StackSize);
+                AmmunitionCountChanged?.Invoke(_currentAmmunition.StackSize);
             }
         }
 
-        public bool CheckAmmoCount()
+        public void ChangeCurrentAmmoCount(int changeValue)
         {
-            if (_ammunition == null || _ammunition.StackSize <= 0)
-            {
-                return false;
-            }
-            
-            return true;
-        }
-
-        public void ChangeAmmoCount(int changeValue)
-        {
-            _ammunition.StackSize += changeValue;
-            AmmunitionCountChanged?.Invoke(_ammunition.StackSize);
-        }
-
-        private void UpdateAmmoCountInStartGame()
-        {
-            AmmunitionCountChanged?.Invoke(_ammunition.StackSize);
-            Debug.Log("Ammunition Count: " + _ammunition.StackSize);
-        }
-
-        private void OnEnable()
-        {
-            _gameEvent.AddSub(GameEventType.GameStart, UpdateAmmoCountInStartGame);
-        }
-
-        private void OnDisable()
-        {
-            _gameEvent.RemoveSub(GameEventType.GameStart, UpdateAmmoCountInStartGame);
+            _currentAmmunition.StackSize += changeValue;
+            AmmunitionCountChanged?.Invoke(_currentAmmunition.StackSize);
         }
     }
 }

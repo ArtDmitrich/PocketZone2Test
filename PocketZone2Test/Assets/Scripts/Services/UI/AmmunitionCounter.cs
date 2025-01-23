@@ -35,28 +35,18 @@ namespace Services.UI
         {
             Anim.SetTrigger(_animationTrigger);
         }
-
-        private void Start()
+        
+        private void OnEnable()
         {
+            SetCounterText(_ammunitionController.CurrentAmmunitionCount);
             _ammunitionController.AmmunitionCountChanged += SetCounterText;
             _gameEvent.AddSub(GameEventType.AmmoNotEnought, PlayAmmoNotEnoughtAnimation);
         }
-
-        private void OnDestroy()
+        
+        private void OnDisable()
         {
             _ammunitionController.AmmunitionCountChanged -= SetCounterText;
             _gameEvent.RemoveSub(GameEventType.AmmoNotEnought, PlayAmmoNotEnoughtAnimation);
         }
-        // private void OnEnable()
-        // {
-        //     _ammunitionController.AmmunitionCountChanged += SetCounterText;
-        //     _gameEvent.AddSub(GameEventType.AmmoNotEnought, PlayAmmoNotEnoughtAnimation);
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     _ammunitionController.AmmunitionCountChanged -= SetCounterText;
-        //     _gameEvent.RemoveSub(GameEventType.AmmoNotEnought, PlayAmmoNotEnoughtAnimation);
-        // }
     }
 }

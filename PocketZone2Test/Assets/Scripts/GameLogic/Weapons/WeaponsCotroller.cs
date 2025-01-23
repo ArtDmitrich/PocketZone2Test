@@ -62,7 +62,7 @@ namespace GameLogic.Weapons
 
         private void TryAttackWithCurrentWeapon()
         {
-            if (!_ammunitionController.CheckAmmoCount())
+            if (!CheckAmmoCount())
             {
                 _gameEvent.InvokeEvent(GameEventType.AmmoNotEnought);
                 return;
@@ -70,8 +70,13 @@ namespace GameLogic.Weapons
 
             if (_currentWeapon.Value.TryAttack())
             {
-                _ammunitionController.ChangeAmmoCount(-1);
+                _ammunitionController.ChangeCurrentAmmoCount(-1);
             }
+        }
+        
+        private bool CheckAmmoCount()
+        {
+            return _ammunitionController.CurrentAmmunitionCount > 0;
         }
 
         private void OnEnable()
